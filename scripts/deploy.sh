@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e
+set -euo pipefail
+set -x
 
 ACTIVE=$(grep server nginx-proxy/nginx.conf | grep -o 'app_[a-z]*')
 if [ "$ACTIVE" = "app_blue" ]; then
@@ -38,7 +39,8 @@ fi
 
 echo "Switching traffic to $NEW"
 sed -i "s/app_$OLD/app_$NEW/" nginx-proxy/nginx.conf
-docker-compose exec -T nginx nginx -s reload
+NGINX_ID=$(docker-compose ps -q nginx)
+docker kill -s HUP "$NGINX_ID"
 
 echo "Stopping old container"
 docker-compose rm -sf app_$OLD
