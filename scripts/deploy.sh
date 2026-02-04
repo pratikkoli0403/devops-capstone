@@ -38,7 +38,7 @@ fi
 
 echo "Switching traffic to $NEW"
 sed -i "s/app_$OLD/app_$NEW/" nginx-proxy/nginx.conf
-docker exec nginx_proxy nginx -s reload
+docker-compose exec -T nginx nginx -s reload
 
 echo "Stopping old container"
 docker-compose rm -sf app_$OLD
