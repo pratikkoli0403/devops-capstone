@@ -12,6 +12,8 @@ fi
 
 echo "Active: $OLD → Deploying: $NEW"
 
+docker compose rm -f app_$NEW || true
+
 docker compose build \
   --build-arg APP_COLOR=$NEW \
   --build-arg APP_VERSION=$(date +%Y%m%d%H%M) \
