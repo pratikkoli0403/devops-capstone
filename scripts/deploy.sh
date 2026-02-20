@@ -12,7 +12,7 @@ fi
 
 echo "Active: $OLD → Deploying: $NEW"
 
-docker-compose build \
+docker compose build \
   --build-arg APP_COLOR=$NEW \
   --build-arg APP_VERSION=$(date +%Y%m%d%H%M) \
   --build-arg APP_COMMIT=$(git rev-parse --short HEAD) \
@@ -38,7 +38,7 @@ fi
 
 echo "Switching traffic to $NEW"
 sed -i "s/app_$OLD/app_$NEW/" nginx-proxy/nginx.conf
-docker-compose up -d nginx
+docker compose up -d nginx
 
 echo "Stopping old container"
 docker compose rm -sf app_$OLD
